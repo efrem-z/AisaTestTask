@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "order")
@@ -19,15 +21,19 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User client;
 
-    @NotBlank(message = "order type cannot be empty")
-    private String orderType;
+    @NotBlank(message = "service type cannot be empty")
+    private String serviceType;
 
     @NotBlank(message = "date cannot be empty")
-    private String date;
-
-    @NotBlank(message = "time cannot be empty")
-    private String time;
+    private Date date;
 
 
+    public Order(){
+    }
 
+    public Order(User client, String serviceType, Date date) {
+        this.client = client;
+        this.serviceType = serviceType;
+        this.date = date;
+    }
 }
