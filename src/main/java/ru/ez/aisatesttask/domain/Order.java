@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Table(name = "orders")

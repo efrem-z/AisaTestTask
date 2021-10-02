@@ -22,6 +22,7 @@ public class OrderTypeService {
 
     public void add (String typeOfOrder){
         OrderType orderType = new OrderType(typeOfOrder);
+
         orderTypeRepo.save(orderType);
     }
 

@@ -17,11 +17,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
-    @Autowired
+
     private UserRepo userRepo;
-    @Autowired
+
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder) {
+        this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -30,6 +35,7 @@ public class UserService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("user not found");
         }
+
         return user;
     }
 
@@ -45,6 +51,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userRepo.save(user);
+
         return true;
     }
 
@@ -66,6 +73,7 @@ public class UserService implements UserDetailsService {
                 user.getRoles().add(Role.valueOf(key));
             }
         }
+
         userRepo.save(user);
     }
 

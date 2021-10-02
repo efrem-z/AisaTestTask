@@ -18,7 +18,6 @@ public class OrderType {
     private String name;
 
     public OrderType(){
-
     }
 
     public OrderType(String name) {

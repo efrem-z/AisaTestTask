@@ -20,15 +20,18 @@ import java.util.Map;
 public class RegistrationController {
     private final static String CAPTCHA_URL = "https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s";
 
-    @Autowired
     private UserService userService;
 
     @Value("${recaptcha.secret}")
     private String secret;
 
-    @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    public RegistrationController(UserService userService, RestTemplate restTemplate) {
+        this.userService = userService;
+        this.restTemplate = restTemplate;
+    }
 
     @GetMapping("/registration")
     public String registration(){
@@ -44,6 +47,7 @@ public class RegistrationController {
             Model model
     ) {
         String url = String.format(CAPTCHA_URL, secret, captchaResponse);
+
         CaptchaResponseDto response = restTemplate.postForObject(url, Collections.emptyList(), CaptchaResponseDto.class);
 
         if(!response.isSuccess()){
@@ -51,12 +55,14 @@ public class RegistrationController {
         }
 
         boolean isConfirmEmpty = StringUtils.isEmpty(passwordConfirm);
+
         if(isConfirmEmpty){
             model.addAttribute("password2Error", "password confirmation cannot be empty");
         }
 
         if(user.getPassword() != null && !user.getPassword().equals(passwordConfirm)){
             model.addAttribute("passwordError","password are different");
+
             return "registration";
         }
 
@@ -70,6 +76,7 @@ public class RegistrationController {
 
         if(!userService.addUser(user)){
             model.addAttribute("usernameError","User exists!");
+
             return "registration";
         }
         return "redirect:/login";

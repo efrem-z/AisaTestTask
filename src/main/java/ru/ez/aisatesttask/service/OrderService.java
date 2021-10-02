@@ -55,9 +55,11 @@ public class OrderService {
 
     public Order findById(long id) {
         Order order = null;
+
         if (orderRepo.findById(id).isPresent()) {
             order = orderRepo.findById(id).get();
         }
+
         return order;
     }
 
