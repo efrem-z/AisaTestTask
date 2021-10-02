@@ -7,7 +7,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "services")
 @Data
 @EqualsAndHashCode
 public class OrderType {

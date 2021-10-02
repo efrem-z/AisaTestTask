@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @Data
 @EqualsAndHashCode
 public class Order {
@@ -17,16 +17,14 @@ public class Order {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User client;
-
     @NotBlank(message = "service type cannot be empty")
     private String serviceType;
-
-    @NotBlank(message = "date cannot be empty")
+    
     private Date date;
 
+    @ManyToOne (fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User client;
 
     public Order(){
     }

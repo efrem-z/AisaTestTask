@@ -24,7 +24,7 @@ public class OrderService {
     }
 
     public Order create (User client, String serviceType, Date date){
-        if(orderRepo.existByDate(date)){
+        if(orderRepo.findByDate(date) !=null){
             return orderRepo.findByDate(date);
         } else {
             Order order = new Order(client,serviceType,date);

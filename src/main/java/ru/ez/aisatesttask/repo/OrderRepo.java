@@ -9,7 +9,5 @@ import ru.ez.aisatesttask.domain.User;
 import java.util.Date;
 
 public interface OrderRepo extends JpaRepository<Order, Long> {
-    boolean existByDate(Date date);
-
     Order findByDate(Date date);
 }
