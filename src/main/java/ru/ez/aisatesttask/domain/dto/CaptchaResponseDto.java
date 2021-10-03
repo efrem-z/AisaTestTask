@@ -16,6 +16,4 @@ public class CaptchaResponseDto {
     public boolean isSuccess() {
         return success;
     }
-
-
 }

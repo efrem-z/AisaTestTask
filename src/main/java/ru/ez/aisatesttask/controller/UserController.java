@@ -10,7 +10,6 @@ import ru.ez.aisatesttask.domain.Role;
 import ru.ez.aisatesttask.domain.User;
 import ru.ez.aisatesttask.service.UserService;
 
-
 import java.util.Map;
 
 @Controller
@@ -68,5 +67,4 @@ public class UserController {
 
         return "redirect:/user/profile";
     }
-
 }
