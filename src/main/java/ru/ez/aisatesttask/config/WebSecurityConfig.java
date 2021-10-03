@@ -29,9 +29,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //для включения авторизации убрать в первом параметре **, оставить просто /
         http
                 .authorizeRequests()
-                .antMatchers("/","/registration","/static/**","/swagger-ui/**","/swagger-resources/**",
+                .antMatchers("/**","/registration","/static/**","/swagger-ui/**","/swagger-resources/**",
                         "/swagger-ui.html",
                         "/v3/api-docs",
                         "/webjars/**").permitAll()

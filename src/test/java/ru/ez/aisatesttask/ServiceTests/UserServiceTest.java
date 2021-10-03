@@ -7,16 +7,15 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.ez.aisatesttask.domain.Role;
 import ru.ez.aisatesttask.domain.User;
 import ru.ez.aisatesttask.repo.UserRepo;
 import ru.ez.aisatesttask.service.UserService;
 
-
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @SpringBootTest
@@ -26,9 +25,6 @@ public class UserServiceTest {
 
     @MockBean
     private UserRepo userRepo;
-
-    @MockBean
-    private PasswordEncoder passwordEncoder;
 
     @Test
     public void addUser() {
@@ -59,7 +55,6 @@ public class UserServiceTest {
         assertFalse(isUserCreated);
 
         Mockito.verify(userRepo, Mockito.times(0)).save(ArgumentMatchers.any(User.class));
-
     }
 
 }
