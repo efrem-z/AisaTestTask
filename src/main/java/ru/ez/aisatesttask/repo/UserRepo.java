@@ -5,4 +5,5 @@ import ru.ez.aisatesttask.domain.User;
 
 public interface UserRepo extends JpaRepository<User, Long> {
     User findByUsername(String username);
+    User findById (long id);
 }

@@ -10,10 +10,11 @@ import ru.ez.aisatesttask.domain.Role;
 import ru.ez.aisatesttask.domain.User;
 import ru.ez.aisatesttask.service.UserService;
 
+import java.util.List;
 import java.util.Map;
 
-@Controller
-@RequestMapping("/user")
+@RestController
+@RequestMapping("/users")
 public class UserController {
     private UserService userService;
 
@@ -22,49 +23,22 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
-    public String userList(Model model) {
-        model.addAttribute("users", userService.findAll());
-
-        return "userList";
+    public List<User> userList() {
+        return userService.findAll();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("{user}")
-    public String userEditForm(@PathVariable User user, Model model) {
-        model.addAttribute("user", user);
-        model.addAttribute("roles", Role.values());
-
-        return "userEdit";
+    @GetMapping("profile/{user_id}")
+    public User getProfile(@PathVariable long user_id) {
+        return userService.findById(user_id);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping
-    public String userSave(
-            @RequestParam String username,
-            @RequestParam Map<String, String> form,
-            @RequestParam("userId") User user) {
-        userService.saveUser(user, username, form);
-
-        return "redirect:/user";
-    }
-
-    @GetMapping("profile")
-    public String getProfile(Model model, @AuthenticationPrincipal User user) {
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("email", user.getEmail());
-
-        return "profile";
-    }
-
-    @PostMapping("profile")
-    public String updateProfile(
-            @AuthenticationPrincipal User user,
+    @PostMapping("profile/{user_id}")
+    public void updateProfile(
+            @PathVariable long user_id,
             @RequestParam String password,
             @RequestParam String email) {
-        userService.updateProfile(user, password, email);
-
-        return "redirect:/user/profile";
+        userService.updateProfile(userService.findById(user_id), password, email);;
     }
 }

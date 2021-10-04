@@ -9,63 +9,53 @@ import org.springframework.web.bind.annotation.*;
 import ru.ez.aisatesttask.domain.Order;
 import ru.ez.aisatesttask.domain.User;
 import ru.ez.aisatesttask.service.OrderService;
+import ru.ez.aisatesttask.service.UserService;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
-@Controller
+@RestController
 @RequestMapping("/orders")
 public class OrderController {
 
     private final OrderService orderService;
 
+    private final UserService userService;
+
     @Autowired
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService,UserService userService) {
         this.orderService = orderService;
+        this.userService = userService;
     }
 
     @PostMapping("/create")
-    public String createOrder(
-            @AuthenticationPrincipal User client,
+    public void createOrder(
+            @RequestParam String username,
             @RequestParam String serviceType,
             @RequestParam Date date){
-       orderService.create(client, serviceType, date);
-
-        return "redirect:/orders";
+       orderService.create(username, serviceType, date);
     }
 
     @GetMapping("/{id}")
-    public String getOrder(@PathVariable long id, Model model){
-        model.addAttribute("order",orderService.findById(id));
-
-        return "order";
+    public Order getOrder(@PathVariable long id){
+        return orderService.findById(id);
     }
 
-    @GetMapping("/time/{id}")
-    public String getTimeBeforeStart(@PathVariable long id, Model model){
-        model.addAttribute("timeBeforeStart", orderService.timeToStart(id));
-
-        return "time-before-start";
+    @GetMapping("/time/{order_id}")
+    public String getTimeBeforeStart(@PathVariable long order_id){
+        return orderService.timeToStart(order_id);
     }
 
-    @GetMapping("/{user}")
-    public String getAllOrders(
-        @AuthenticationPrincipal User currentClient,
-        @PathVariable User user,
-        Model model){
-        Set<Order> orders = user.getOrders();
-
-        model.addAttribute("orders",orders);
-        model.addAttribute("isCurrentUser",currentClient.equals(user));
-
-        return "my-orders";
+    @GetMapping("all/{user_id}")
+    public List<Order> getAllOrders(
+        @PathVariable long user_id){
+        return userService.findById(user_id).getOrders();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all-orders")
-    public String getAllClientsOrders(Model model){
-        model.addAttribute(orderService.showAll());
-
-        return "clients-orders";
+    public List<Order> getAllClientsOrders(){
+        return orderService.showAll();
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class MainController {
     @GetMapping()
-    public String greeting(Model model) {
+    public String greeting() {
         return "greeting";
     }
 }

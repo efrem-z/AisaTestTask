@@ -23,11 +23,11 @@ public class OrderService {
         this.userRepo = userRepo;
     }
 
-    public Order create (User client, String serviceType, Date date){
+    public Order create (String username, String serviceType, Date date){
         if(orderRepo.findByDate(date) !=null){
             return orderRepo.findByDate(date);
         } else {
-            Order order = new Order(client,serviceType,date);
+            Order order = new Order(userRepo.findByUsername(username),serviceType,date);
 
             orderRepo.save(order);
 
@@ -35,15 +35,17 @@ public class OrderService {
         }
     }
 
-    public Long timeToStart(long id){
+    public String timeToStart(long id){
         long currentDate =  System.currentTimeMillis();
 
         if(orderRepo.existsById(id)){
-            Order order = orderRepo.findById(id).get();
+            Order order = orderRepo.findById(id);
 
-            long hoursToStart = (order.getDate().getTime()-currentDate)/(60*60*1000);
+            double a = ((order.getDate().getTime()-currentDate)/(60*60*1000));
+            double b = ((order.getDate().getTime()-currentDate)/(60*1000));
+            double c = b - a*60;
 
-            return hoursToStart;
+            return "start in " + a + " hours " + c + " minutes";
         } else {
             return null;
         }
@@ -54,13 +56,8 @@ public class OrderService {
     }
 
     public Order findById(long id) {
-        Order order = null;
 
-        if (orderRepo.findById(id).isPresent()) {
-            order = orderRepo.findById(id).get();
-        }
-
-        return order;
+        return orderRepo.findById(id);
     }
 
     public void removeById(long id) {

@@ -7,4 +7,5 @@ import java.util.Date;
 
 public interface OrderRepo extends JpaRepository<Order, Long> {
     Order findByDate(Date date);
+    Order findById(long id);
 }

@@ -20,12 +20,10 @@ public class UserService implements UserDetailsService {
 
     private UserRepo userRepo;
 
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepo userRepo) {
         this.userRepo = userRepo;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -39,43 +37,26 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public boolean addUser(User user) {
-        User userFromDb = userRepo.findByUsername(user.getUsername());
+    public User addUser(User user) {
+        User userFromDb = userRepo.findById(user.getId());
 
         if (userFromDb != null) {
-            return false;
+            return userFromDb;
         }
 
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.CLIENT));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(user.getPassword());
 
         userRepo.save(user);
 
-        return true;
+        return user;
     }
 
     public List<User> findAll() {
         return userRepo.findAll();
     }
 
-    public void saveUser(User user, String username, Map<String, String> form) {
-        user.setUsername(username);
-
-        Set<String> roles = Arrays.stream(Role.values())
-                .map(Role::name)
-                .collect(Collectors.toSet());
-
-        user.getRoles().clear();
-
-        for (String key : form.keySet()) {
-            if (roles.contains(key)) {
-                user.getRoles().add(Role.valueOf(key));
-            }
-        }
-
-        userRepo.save(user);
-    }
 
     public void updateProfile(User user, String password, String email) {
         String userEmail = user.getEmail();
@@ -88,9 +69,13 @@ public class UserService implements UserDetailsService {
         }
 
         if (!StringUtils.isEmpty(password)) {
-            user.setPassword(passwordEncoder.encode(password));
+            user.setPassword(password);
         }
 
         userRepo.save(user);
+    }
+
+    public User findById(long id){
+        return userRepo.findById(id);
     }
 }

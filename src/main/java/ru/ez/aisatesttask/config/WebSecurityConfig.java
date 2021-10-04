@@ -13,43 +13,38 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.ez.aisatesttask.service.UserService;
 
 @Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//выключено т.к. проблемы с авторизацией
+//@EnableWebSecurity
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
-    @Bean
-    public PasswordEncoder getPasswordEncoder(){
-        return new BCryptPasswordEncoder(8);
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //для включения авторизации убрать в первом параметре **, оставить просто /
         http
-                .authorizeRequests()
-                .antMatchers("/**","/registration","/static/**","/swagger-ui/**","/swagger-resources/**",
-                        "/swagger-ui.html",
-                        "/v3/api-docs",
-                        "/webjars/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .and()
-                .rememberMe()
-                .and()
-                .logout()
-                .permitAll();
+                .csrf().disable();
+//                .authorizeRequests()
+//                .antMatchers("/**","/registration","/static/**","/swagger-ui/**","/swagger-resources/**",
+//                        "/swagger-ui.html",
+//                        "/v3/api-docs",
+//                        "/webjars/**").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .permitAll()
+//                .and()
+//                .rememberMe()
+//                .and()
+//                .logout()
+//                .permitAll();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService)
-                .passwordEncoder(passwordEncoder);
+        auth.userDetailsService(userService);
     }
 }

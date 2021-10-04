@@ -27,6 +27,6 @@ public class OrderTypeService {
     }
 
     public void delete (String typeOfOrder){
-        orderTypeRepo.deleteByName(typeOfOrder);
+        orderTypeRepo.delete(orderTypeRepo.findByName(typeOfOrder));
     }
 }

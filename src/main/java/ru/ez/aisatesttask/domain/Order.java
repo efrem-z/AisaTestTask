@@ -1,17 +1,20 @@
 package ru.ez.aisatesttask.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "orders")
 @Data
 @EqualsAndHashCode
-public class Order {
+
+public class Order  {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
@@ -23,6 +26,7 @@ public class Order {
 
     @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User client;
 
     public Order(){
