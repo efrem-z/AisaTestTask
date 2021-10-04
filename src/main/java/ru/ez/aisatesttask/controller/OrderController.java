@@ -38,7 +38,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public Order getOrder(@PathVariable long id){
+    public Order getOneClientOrder(@PathVariable long id){
         return orderService.findById(id);
     }
 
@@ -48,14 +48,14 @@ public class OrderController {
     }
 
     @GetMapping("all/{user_id}")
-    public List<Order> getAllOrders(
+    public List<Order> getAllClientOrders(
         @PathVariable long user_id){
         return userService.findById(user_id).getOrders();
     }
 
 //    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all-orders")
-    public List<Order> getAllClientsOrders(){
+    public List<Order> getAllOrdersInDB(){
         return orderService.showAll();
     }
 }

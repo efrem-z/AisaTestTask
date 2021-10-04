@@ -21,7 +21,7 @@ public class OrderTypeController {
     }
 
     @GetMapping()
-    public List<OrderType> serviceTypes(){
+    public List<OrderType> getAllServiceTypes(){
         return orderTypeService.showAll();
     }
 

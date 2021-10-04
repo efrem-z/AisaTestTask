@@ -39,11 +39,9 @@ public class RegistrationController {
             @RequestParam String username,
             @RequestParam String password,
             @RequestParam String email,
-            @RequestParam String phoneNumber
-    ) {
+            @RequestParam String phoneNumber) {
         User user = new User(username,password,email,phoneNumber);
 
         userService.addUser(user);
     }
-
 }
